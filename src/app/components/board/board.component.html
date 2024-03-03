@@ -1,0 +1,19 @@
+
+<app-cell></app-cell>   
+<div   style = "display: flex;  flex-direction: row; flex-wrap: wrap;width: 400px">
+    <div  (dragover)='onDragover($event)' *ngFor="let cells of board1" (dragstart)="onDragStart(cells)">
+    <!-- style = "display: flex;  flex-direction: row; flex-wrap: wrap;"        -->
+        <div (drop)="onDrop($event, cells)"  [ngStyle]="{'background-color': cells.color , 'height': cells.size, 'width': cells.size}"> 
+            <div draggable="true" *ngIf="cells.piece != ''">
+                <img src="{{cells.piece_url}}" width="40px" height="40px">
+            </div>
+        </div>
+    </div>
+</div>
+<div> Data : {{player_turn}}</div>
+<!-- <div>
+    <div draggable="true" *ngFor="let cells of board_index" (dragstart)="onDragStart(cells)">
+    style = "display: flex;  flex-direction: row; flex-wrap: wrap;" 
+        <div draggable="true">  {{cells}}  </div> 
+    </div>
+</div> -->

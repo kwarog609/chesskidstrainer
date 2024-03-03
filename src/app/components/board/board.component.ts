@@ -72,33 +72,52 @@ export class BoardComponent {
          color = (color == bcolor) ? wcolor :bcolor;
          let piece = this.assign_officer(rank, files)
          const name = (files + String(rank))
-         this.board1.push(new Square(count,name,color, piece[0], piece[1], rank, files))
-         console.log(files + String(rank) + piece[0] + piece[1])
+         this.board1.push(new Square(count,name,color, piece[0], piece[1], piece[2], rank, files))
          count++
       })
     }
   }
+  private get_position(file: number, rank: number) {
+    //returns a square name
+    let move = String.fromCharCode(96 + file) + "" + rank
+    return move
+  }
 
-  private check_legal_moves(from_square: String, piece: String): string{
+  private get_index(name: String){
+    //returns rank and file in number
+    let file =  ((this.board1.filter(x => x.cell_name == name))[0].file).valueOf()
+    let rank = ((this.board1.filter(x => x.cell_name == name))[0].rank).valueOf()
+    // convert numbers to letters String.fromCharCode(97 + n)
+    // let possible_moves = String.fromCharCode(97 + current_square_rank)
+    let file_transformed = parseInt(file , 36) -9
+    console.log("file: " + file + '  rank: ' + rank)
+    return [file_transformed, rank]
+  }
+
+  private check_legal_moves(from_square: String, piece: String, color: String, target_square: string): string{
       //possible moves
       //parseInt('a', 36) - 9 convert to number
-     let file =  ((this.board1.filter(x => x.cell_name == from_square))[0].file).valueOf()
-    let current_square_file = parseInt(file , 36) -9
-    let current_square_rank = ((this.board1.filter(x => x.cell_name == from_square))[0].rank).valueOf()
-    console.log(current_square_file)
-    console.log(current_square_rank)
-    let move = ''
+    let piece_color = color
+    let file = this.get_index(from_square)[0]
+    let rank = this.get_index(from_square)[1]
     switch(piece){
       case 'pawn':{
-        current_square_rank += 1;
-        // convert numbers to letters String.fromCharCode(97 + n)
-        // let possible_moves = String.fromCharCode(97 + current_square_rank)
+        if (piece_color == 'white') {
+            rank += 1;
+        } else {
+          rank -= 1;
+        }
+
         // console.log("possible moves: " + possible_moves)
-        move = file + "" + current_square_rank
-        console.log(move)
-        if(((this.board1.filter(x => x.cell_name == move))[0].piece).valueOf() != '') {
-          return 'legal'
-          console.log('legal')
+      let move = this.get_position(file, rank)
+      console.log("move: " + move)
+      let possible_moves = (this.board1.filter(x => x.cell_name == move))[0];
+      console.log("possible move: " + possible_moves.cell_name)
+      console.log("possible move: " + possible_moves.piece)
+      console.log("target square: " + target_square)
+      if(((possible_moves.piece) == '' && target_square == move)) {
+        console.log('legal')
+        return 'legal'
         } else {
           break;
         }
@@ -128,12 +147,14 @@ export class BoardComponent {
     const piece = move_from.piece;
     const from_square = (move_from.cell_name)
     const to_square = move_to.cell_name
+    const piece_color = move_from.piece_color
 
     // call move checker 
     const current_square = this.board1.filter(x => x.cell_name == from_square) //returns current square
+    const target_square = this.board1.filter(x => x.cell_name == to_square) // returns target square
     console.log(current_square)
     
-    if(this.check_legal_moves(from_square, piece) == 'legal'){
+    if(this.check_legal_moves(from_square, piece, piece_color, target_square[0].cell_name.valueOf()) == 'legal'){
       return true;
     }
 
@@ -143,29 +164,34 @@ export class BoardComponent {
     // let piece = (rank == 2 || rank == 7) ? 'pawn' : '';
     let piece = ''
     let officer = this.initial_piece[file]
-    let piece_color = ""
+    let url_ext = ""
+    let piece_color = ''
     if(rank == 2  ){
      piece = 'pawn';
-     piece_color = "w_"
+     url_ext = "w_"
+     piece_color = 'white'
     } else if (rank == 7){
       piece = 'pawn';
-      piece_color = "b_"
+      url_ext = "b_"
+      piece_color = 'black'
     } else if (rank == 8){
       piece = officer;
-      piece_color = "b_"
+      url_ext = "b_"
+      piece_color = 'black'
     } else if (rank == 1){
       piece = officer;
-      piece_color = "w_"
+      url_ext = "w_"
+      piece_color = 'white'
     } else {
      piece = ''
     }
-    const url = 'assets/img/' + piece_color + piece + '.png';
+    const url = 'assets/img/' + url_ext + piece + '.png';
 
     // console.log(this.initial_piece.[file] )
     // console.log(_.get(this.initial_piece, file))
     // return this.initial_piece[file]
     // console.log(Object.keys(this.initial_piece))
-    return [piece , url]
+    return [piece , url, piece_color]
   }
 
   onDragStart(cell: any){
@@ -175,7 +201,6 @@ export class BoardComponent {
   }
   onDrop(event: any, move: Square){
     console.log("ondrop")
-    console.log(move.cell_id + '' + move.cell_name)
     if ( this.check_legal(this.current_drag, move) == true ) {
       // console.log(cell.piece)
       // console.log(this.board1[index])
@@ -183,9 +208,10 @@ export class BoardComponent {
       // console.log(this.current_drag.piece)
       // to drop place = from current drag
       this.player_turn = (this.player_turn == 'black') ? "white":"black";
-      const index = parseInt(String(move.cell_id)) - 1
+      const index = parseInt(String(move.cell_id)) - 1;
       this.board1[index].piece = this.current_drag.piece
       this.board1[index].piece_url = this.current_drag.piece_url 
+      this.board1[index].piece_color = this.current_drag.piece_color
       // then set null the from place
       this.current_drag.piece = ''
       this.current_drag.piece_url = ''

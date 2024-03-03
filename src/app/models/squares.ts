@@ -14,6 +14,7 @@ export class Square
     public color: String = 'black';
     public piece: String = '';
     public piece_url: String = '';
+    public piece_color: String = '';
     public rank: Number = 1;
     public file: String = '';
 
@@ -24,6 +25,7 @@ export class Square
      color: String ,
      piece: String,
      piece_url: String,
+     piece_color: String,
      rank: Number,
      file: String,
 
@@ -34,8 +36,10 @@ export class Square
     this.color = color;
     this.piece = piece;
     this.piece_url = piece_url;
+    this.piece_color = piece_color;
     this.rank = rank;
     this.file = file;
+
 
 
   // }

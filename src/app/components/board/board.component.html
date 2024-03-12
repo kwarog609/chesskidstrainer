@@ -5,7 +5,7 @@
     <!-- style = "display: flex;  flex-direction: row; flex-wrap: wrap;"        -->
         <div (drop)="onDrop($event, cells)"  [ngStyle]="{'background-color': cells.color , 'height': cells.size, 'width': cells.size}"> 
             <div draggable="true" *ngIf="cells.piece != ''">
-                <img src="{{cells.piece_url}}" width="40px" height="40px">
+                <img src="{{cells.piece_url}}" width="40px" height="40px"> {{cells.rank}}
             </div>
         </div>
     </div>

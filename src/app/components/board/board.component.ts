@@ -2,11 +2,12 @@ import { Component,  } from '@angular/core';
 import { CellComponent } from '../cell/cell.component';
 import { CommonModule } from '@angular/common';
 import { Square } from '../../models/squares';  
+import {Piece} from '../../models/pieces';
 
 @Component({
   selector: 'app-board',
   standalone: true,
-  imports: [CellComponent, CommonModule],
+  imports: [CellComponent, CommonModule, ],
   templateUrl: './board.component.html',
   styleUrl: './board.component.css'
 })

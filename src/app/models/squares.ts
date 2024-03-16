@@ -45,11 +45,16 @@ export class Square
       //add piece if using the analyze and board set up
     }
 
+    public set_piece(piece: Piece){
+      this.piece = piece;
+    }
+
     public get_name(): String {
       return this.cell_name
     }
     public get_file():number{
       return parseInt(this.file.valueOf() , 36) -9
+      
     }  public get_rank(): number{
       return this.rank.valueOf()
     }
@@ -66,6 +71,7 @@ export class Square
     let officer = this.initial_piece[file]
     let url_ext = ""
     let piece_color = ''
+    let symbol = ''
     if(rank == 2  ){
      piece = 'pawn';
      url_ext = "w_"
@@ -92,6 +98,11 @@ export class Square
     // return this.initial_piece[file]
     // console.log(Object.keys(this.initial_piece))
     this.piece = new Piece(piece, piece_color);
+
+    this.piece.symbol
+    if (this.piece.color == 'black'){
+      this.piece.your_turn = false;
+    }
     if (piece == ''){
       url = '';
     }

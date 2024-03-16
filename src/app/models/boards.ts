@@ -47,10 +47,13 @@ export class Board
     console.log("this is the populated board: " + this.board[0])
   }
 
-  public get_piece(cell_name: string){
+  public get_piece(cell_name: string): Piece{
     return (this.board.filter(x => x.cell_name == cell_name))[0].piece
   }
 
+  public get_square(cell_name: string): Square{
+    return (this.board.filter(x => x.cell_name == cell_name)[0])
+  }
 
   public is_occupied(cell_name: string){
     console.log(this.board.filter(x => x.cell_name == cell_name));
@@ -220,14 +223,171 @@ export class Board
       return moves
   }
   
-  public get_left_to_right_diagonal_moves(){
-    
+  public get_left_to_right_diagonal_moves(move_from: any): Array<string>{
+    let moves:Array<string> = [];
+    let x = 0;
+    let y = 0;
+    let rank = move_from.get_rank()+1
+    let file = move_from.get_file()+1
+   loop1: for(let i = rank; y <=8; i++){
+     loop2: for(let j = file ; x <=8; j++){
+        if(x == y) {
+          if (!this.is_occupied(this.map_coordinates(j, i))){
+            moves.push(this.map_coordinates(j, i))
+          } else if (this.is_occupied(this.map_coordinates(j, i)) && this.can_capture(this.map_coordinates(j, i), move_from)){
+            moves.push(this.map_coordinates(j, i))
+            break loop1;
+          } else {
+            break loop1;
+          }
+      } 
+      x++;
+    }
+      y++;
+      x = 0; 
   }
-  public get_right_to_left_diagonal_moves(){
-    
+    return moves
+  }
+  public get_negative_left_to_right_diagonal_moves(move_from: any): Array<string>{
+    let moves:Array<string> = [];
+    let x = 0;
+    let y = 0;
+    let file_opposite = move_from.get_file()-1
+    let rank_opposite = move_from.get_rank()-1
+    let rank = move_from.get_rank()-1
+    let file = move_from.get_file()-1
+   loop1: for(let i = rank; y <=8; i++){
+     loop2: for(let j = file ; x <=8; j++){
+        if(x == y) {
+          if (!this.is_occupied(this.map_coordinates(file_opposite,rank_opposite))){
+            moves.push(this.map_coordinates(file_opposite,rank_opposite))
+          } else if (this.is_occupied(this.map_coordinates(file_opposite,rank_opposite)) && this.can_capture(this.map_coordinates(file_opposite,rank_opposite), move_from)){
+            moves.push(this.map_coordinates(file_opposite,rank_opposite))
+            break loop1;
+          } else {
+            break loop1;
+          }
+      } 
+      x++;
+    }
+    rank_opposite--;
+    file_opposite--;
+      y++;
+      x = 0; 
+  }
+    return moves
   }
 
+  public get_right_to_left_diagonal_moves(move_from: any): Array<string>{
+    let moves:Array<string> = [];
+    let x = 0;
+    let y = 0;
+    let file_opposite = move_from.get_file()-1
+    let rank_opposite = move_from.get_rank()+1
+    let rank = move_from.get_rank()+1
+    let file = move_from.get_file()-1
+   loop1: for(let i = rank; y <=8; i++){
+     loop2: for(let j = file ; x <=8; j++){
+        if(x == y) {
+          if (!this.is_occupied(this.map_coordinates(file_opposite,i))){
+            moves.push(this.map_coordinates(file_opposite,i))
+          } else if (this.is_occupied(this.map_coordinates(file_opposite,i)) && this.can_capture(this.map_coordinates(file_opposite,i), move_from)){
+            moves.push(this.map_coordinates(file_opposite,i))
+            break loop1;
+          } else {
+            break loop1;
+          }
+      } 
+      x++;
+    }
+    rank_opposite--;
+    file_opposite--;
+      y++;
+      x = 0; 
+  }
+    return moves
+  }  
+  public get_negative_right_to_left_diagonal_moves(move_from: any): Array<string>{
+    let moves:Array<string> = [];
+    let x = 0;
+    let y = 0;
+    let file_opposite = move_from.get_file()+1
+    let rank_opposite = move_from.get_rank()-1
+    let rank = move_from.get_rank()-1
+    let file = move_from.get_file()+1
+   loop1: for(let i = rank; y <=8; i++){
+     loop2: for(let j = file ; x <=8; j++){
+        if(x == y) {
+          console.log("same values")
+          if (!this.is_occupied(this.map_coordinates(j,rank_opposite))){
+            moves.push(this.map_coordinates(j,rank_opposite))
+          } else if (this.is_occupied(this.map_coordinates(j,rank_opposite)) && this.can_capture(this.map_coordinates(j,rank_opposite), move_from)){
+            moves.push(this.map_coordinates(j,rank_opposite))
+            break loop1;
+          } else {
+            break loop1;
+          }
+      } 
+      x++;
+    }
+    rank_opposite--;
+    file_opposite--;
+      y++;
+      x = 0; 
+  }
+    return moves
+  }
 
+  // todo add 0-0 notation then add handling if the rook already moves
+  public castle(move_from: any, move_to: any){
+    // alert(move_from.piece.color == 'white')
+    if (move_from.piece.color == 'white'){
+            if (move_to.cell_name == 'g1'){
+              if(this.get_piece('h1').first_move){
+                let go_to_square = this.get_square('f1')
+                let piece_to_move = this.get_piece('h1')
+                let piece_moved_from = this.get_square('h1')
+                go_to_square.set_piece(piece_to_move);
+                piece_moved_from.piece = new Piece('', 'no color')
+              }
+
+            } else if (move_to.cell_name == 'c1'){
+              if(this.get_piece('a1').first_move){
+                let go_to_square = this.get_square('d1')
+                let piece_to_move = this.get_piece('a1')
+                let piece_moved_from = this.get_square('a1')
+                go_to_square.set_piece(piece_to_move);
+                piece_moved_from.piece = new Piece('', 'no color')
+              }
+            } else {
+              console.log("error castling")
+            }
+    } else if (move_from.piece.color == 'black') {
+          if (move_to.cell_name == 'g8'){
+            if(this.get_piece('h8').first_move){
+              let go_to_square = this.get_square('f8')
+              let piece_to_move = this.get_piece('h8')
+              let piece_moved_from = this.get_square('h8')
+              go_to_square.set_piece(piece_to_move);
+              piece_moved_from.piece = new Piece('', 'no color')
+            } else {alert("not possible")}
+      
+          } else if (move_to.cell_name == 'c8'){
+            if(this.get_piece('a8').first_move){
+              let go_to_square = this.get_square('d8')
+              let piece_to_move = this.get_piece('a8')
+              let piece_moved_from = this.get_square('a8')
+              go_to_square.set_piece(piece_to_move);
+              piece_moved_from.piece = new Piece('', 'no color')
+            }
+          } else {
+            console.log("error castling")
+          }
+
+    } else {
+      console.log('error not black or white')
+    }
+  }
 
   public get_legal(file: number, rank: number, move_from: any, move_to: any): Array<string>{
     let moves:Array<string> = [];
@@ -264,6 +424,24 @@ export class Board
 
           return moves
         }case 'king':{
+          if(move_from.piece.first_move){
+            if (!this.is_occupied(this.map_coordinates(file+1,rank+1)) || move_from_color != this.occupant_color(this.map_coordinates(file+1,rank+1))){ moves.push(this.map_coordinates(file+1,rank+1)) }
+            if (!this.is_occupied(this.map_coordinates(file,rank+1)) || move_from_color != this.occupant_color(this.map_coordinates(file,rank+1))){ moves.push(this.map_coordinates(file,rank+1)) }
+            if (!this.is_occupied(this.map_coordinates(file+2,rank)) || move_from_color != this.occupant_color(this.map_coordinates(file+2,rank))){ 
+              this.castle(move_from, move_to);
+              moves.push(this.map_coordinates(file+2,rank)); }
+            if (!this.is_occupied(this.map_coordinates(file-1,rank+1)) || move_from_color != this.occupant_color(this.map_coordinates(file-1,rank+1))){ moves.push(this.map_coordinates(file-1,rank+1)) }
+            if (!this.is_occupied(this.map_coordinates(file-1,rank-1)) || move_from_color != this.occupant_color(this.map_coordinates(file-1,rank-1))){ moves.push(this.map_coordinates(file-1,rank-1)) }
+            if (!this.is_occupied(this.map_coordinates(file,rank-1)) || move_from_color != this.occupant_color(this.map_coordinates(file,rank-1))){ moves.push(this.map_coordinates(file,rank-1)) }
+            if (!this.is_occupied(this.map_coordinates(file+1,rank-1)) || move_from_color != this.occupant_color(this.map_coordinates(file+1,rank-1))){ moves.push(this.map_coordinates(file+1,rank-1)) }
+            if (!this.is_occupied(this.map_coordinates(file+1,rank)) || move_from_color != this.occupant_color(this.map_coordinates(file+1,rank))){ moves.push(this.map_coordinates(file+1,rank)) }
+            if (!this.is_occupied(this.map_coordinates(file-1,rank)) || move_from_color != this.occupant_color(this.map_coordinates(file-1,rank))){ moves.push(this.map_coordinates(file-1,rank)) }
+            if (!this.is_occupied(this.map_coordinates(file-2,rank)) || move_from_color != this.occupant_color(this.map_coordinates(file-2,rank))){ 
+              this.castle(move_from, move_to);
+              moves.push(this.map_coordinates(file-2,rank)) ; }
+          
+
+          } else {
             if (!this.is_occupied(this.map_coordinates(file,rank+1)) || move_from_color != this.occupant_color(this.map_coordinates(file,rank+1))){ moves.push(this.map_coordinates(file,rank+1)) }
             if (!this.is_occupied(this.map_coordinates(file+1,rank+1)) || move_from_color != this.occupant_color(this.map_coordinates(file+1,rank+1))){ moves.push(this.map_coordinates(file+1,rank+1)) }
             if (!this.is_occupied(this.map_coordinates(file-1,rank+1)) || move_from_color != this.occupant_color(this.map_coordinates(file-1,rank+1))){ moves.push(this.map_coordinates(file-1,rank+1)) }
@@ -271,73 +449,27 @@ export class Board
             if (!this.is_occupied(this.map_coordinates(file,rank-1)) || move_from_color != this.occupant_color(this.map_coordinates(file,rank-1))){ moves.push(this.map_coordinates(file,rank-1)) }
             if (!this.is_occupied(this.map_coordinates(file+1,rank-1)) || move_from_color != this.occupant_color(this.map_coordinates(file+1,rank-1))){ moves.push(this.map_coordinates(file+1,rank-1)) }
             if (!this.is_occupied(this.map_coordinates(file+1,rank)) || move_from_color != this.occupant_color(this.map_coordinates(file+1,rank))){ moves.push(this.map_coordinates(file+1,rank)) }
-            if (!this.is_occupied(this.map_coordinates(file+-1,rank)) || move_from_color != this.occupant_color(this.map_coordinates(file+-1,rank))){ moves.push(this.map_coordinates(file+-1,rank)) }
-          return moves
+            if (!this.is_occupied(this.map_coordinates(file-1,rank)) || move_from_color != this.occupant_color(this.map_coordinates(file-1,rank))){ moves.push(this.map_coordinates(file-1,rank)) }
+          }
+            return moves
 
         } case 'queen':{
-          let x = 0;
-          let y = 0;
-          let file_opposite = file
-          let rank_opposite = rank
-          for(let i = rank; y <=8; i++){
-            for(let j = file ; x <=8; j++){
-              if(x == y) {
-              if (!this.is_occupied(this.map_coordinates(j,i)) || move_from_color != this.occupant_color(this.map_coordinates(j,i))){ moves.push(this.map_coordinates(j,i)) }
-              if (!this.is_occupied(this.map_coordinates(file_opposite,i)) || move_from_color != this.occupant_color(this.map_coordinates(file_opposite,i))){ moves.push(this.map_coordinates(file_opposite,i)) }
-              if (!this.is_occupied(this.map_coordinates(j,rank_opposite)) || move_from_color != this.occupant_color(this.map_coordinates(j,rank_opposite))){ moves.push(this.map_coordinates(j,rank_opposite)) }
-              if (!this.is_occupied(this.map_coordinates(file_opposite,rank_opposite)) || move_from_color != this.occupant_color(this.map_coordinates(file_opposite,rank_opposite))){ moves.push(this.map_coordinates(file_opposite,rank_opposite)) }
-              }
-              x++;
-            } 
-            rank_opposite--;
-            file_opposite--;
-            y++;
-            x = 0;
-          }
-          x = 0;
-          y = 0;
-          file_opposite = file
-          rank_opposite = rank
-          for(let i = rank; y <=8; i++){
-            for(let j = file ; x <=8; j++){// forward
-              if (!this.is_occupied(this.map_coordinates(file,i)) || move_from_color != this.occupant_color(this.map_coordinates(file,i))){ moves.push(this.map_coordinates(file,i)) }
-              if (!this.is_occupied(this.map_coordinates(file,file_opposite)) || move_from_color != this.occupant_color(this.map_coordinates(file,file_opposite))){ moves.push(this.map_coordinates(file,file_opposite)) }
-              if (!this.is_occupied(this.map_coordinates(j,rank)) || move_from_color != this.occupant_color(this.map_coordinates(j,rank))){ moves.push(this.map_coordinates(j,rank)) }
-              if (!this.is_occupied(this.map_coordinates(file_opposite,rank)) || move_from_color != this.occupant_color(this.map_coordinates(file_opposite,rank))){ moves.push(this.map_coordinates(file_opposite,rank)) }
-              x++;
-            } 
-            rank_opposite--;
-            file_opposite--;
-            y++;
-            x = 0;
-          }
-          return moves
+          moves.push(...(this.get_negative_left_to_right_diagonal_moves(move_from)))
+          moves.push(...(this.get_left_to_right_diagonal_moves(move_from)))
+          moves.push(...(this.get_right_to_left_diagonal_moves(move_from)))
+          moves.push(...(this.get_negative_right_to_left_diagonal_moves(move_from)))
 
-        } case 'rook':{
-          // let x = 0;
-          // let y = 0;
-          // let file_opposite = file
-          // let rank_opposite = rank
-          // for(let i = rank; y <=8; i++){
-          //   for(let j = file ; x <=8; j++){
-          //     if (!this.is_occupied(this.map_coordinates(file,i)) || move_from_color != this.occupant_color(this.map_coordinates(file,i))){ moves.push(this.map_coordinates(file,i)) }
-          //     if (!this.is_occupied(this.map_coordinates(file,file_opposite)) || move_from_color != this.occupant_color(this.map_coordinates(file,file_opposite))){ moves.push(this.map_coordinates(file,file_opposite)) }
-          //     if (!this.is_occupied(this.map_coordinates(j,rank)) || move_from_color != this.occupant_color(this.map_coordinates(j,rank))){ moves.push(this.map_coordinates(j,rank)) }
-          //     if (!this.is_occupied(this.map_coordinates(file_opposite,rank)) || move_from_color != this.occupant_color(this.map_coordinates(file_opposite,rank))){ moves.push(this.map_coordinates(file_opposite,rank)) }
-          //     x++;
-          //   } 
-          //   rank_opposite--;
-          //   file_opposite--;
-          //   y++;
-          //   x = 0;
-          // }
-          
           moves.push(...(this.get_vertical_moves(move_from)))
           moves.push(...(this.get_negative_vertical_moves(move_from)))
           moves.push(...(this.get_horizontal_moves(move_from)))
           moves.push(...(this.get_negative_horizontal_moves(move_from)))
+          return moves
 
-          
+        } case 'rook':{
+          moves.push(...(this.get_vertical_moves(move_from)))
+          moves.push(...(this.get_negative_vertical_moves(move_from)))
+          moves.push(...(this.get_horizontal_moves(move_from)))
+          moves.push(...(this.get_negative_horizontal_moves(move_from)))
           return moves
 
         } case 'knight':{
@@ -353,26 +485,12 @@ export class Board
           return moves
 
         } case 'bishop':{
-          let x = 0;
-          let y = 0;
-          let file_opposite = file
-          let rank_opposite = rank
-          for(let i = rank; y <=8; i++){
-            for(let j = file ; x <=8; j++){
-              if(x == y) {
-              if (!this.is_occupied(this.map_coordinates(j,i)) || move_from_color != this.occupant_color(this.map_coordinates(j,i))){ moves.push(this.map_coordinates(j,i)) }
-              if (!this.is_occupied(this.map_coordinates(file_opposite,i)) || move_from_color != this.occupant_color(this.map_coordinates(file_opposite,i))){ moves.push(this.map_coordinates(file_opposite,i)) }
-              if (!this.is_occupied(this.map_coordinates(j,rank_opposite)) || move_from_color != this.occupant_color(this.map_coordinates(j,rank_opposite))){ moves.push(this.map_coordinates(j,rank_opposite)) }
-              if (!this.is_occupied(this.map_coordinates(file_opposite,rank_opposite)) || move_from_color != this.occupant_color(this.map_coordinates(file_opposite,rank_opposite))){ moves.push(this.map_coordinates(file_opposite,rank_opposite)) }
-              }
-              x++;
-            } 
-            rank_opposite--;
-            file_opposite--;
-            y++;
-            x = 0;
-          }
+          moves.push(...(this.get_negative_left_to_right_diagonal_moves(move_from)))
+          moves.push(...(this.get_left_to_right_diagonal_moves(move_from)))
+          moves.push(...(this.get_right_to_left_diagonal_moves(move_from)))
+          moves.push(...(this.get_negative_right_to_left_diagonal_moves(move_from)))
           return moves
+          
         } default:{
           return ['illegal']
 

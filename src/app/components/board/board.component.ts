@@ -1,4 +1,4 @@
-import { Component, Type, } from '@angular/core';
+import { Component, Type, ElementRef, ViewChild, OnInit, AfterViewInit} from '@angular/core';
 import { CellComponent } from '../cell/cell.component';
 import { CommonModule } from '@angular/common';
 import { Square } from '../../models/squares';  
@@ -14,7 +14,14 @@ import { Piece } from '../../models/pieces';
   templateUrl: './board.component.html',
   styleUrl: './board.component.css'
 })
-export class BoardComponent {
+// template: `
+// <h1>Test Angular Programmatic Click Event</h1>
+
+// <div #namedElement (click)="showAlert('Clicked namedElement')">
+//   Named element
+// </div>
+// `,
+export class BoardComponent implements OnInit,AfterViewInit   {
   public board:Board;
   public empty_board;
   // public board1: Array<Square> = [];
@@ -37,7 +44,9 @@ export class BoardComponent {
   //   ['a2','b2','c2','d2','e2','f2','g2','h2',],
   //   ['a1','b1','c1','d1','e1','f1','g1','h1',]
   // ]
-  
+  public game_notations: Array<string> = [];
+  public game_notation_number: number = 1;
+
 
   constructor(){
     this.board = new Board;
@@ -46,43 +55,50 @@ export class BoardComponent {
     console.log("this is the empty board at index o: " + this.empty_board[0]);
 
   }
-  ngOnInit() {
-    // this.board.push(
-    //  this.board = new Board;
-    // var hasName = (name === 'true') ? 'Y' :'N';
-    // for(let i:number=1; i <= (this.size); i++){
-    //   // color = (color === 'white') ? 'white' :'black';
-    //   this.board1.push(new Square(i,'','white', false))
+
+    // @ViewChild('dragevent') dragevent: ElementRef<HTMLElement>;
+    // @ViewChild('testtrigger') testtrigger: ElementRef;
+    // @ViewChild('myDiv', { read: ElementRef }) myDiv: ElementRef<HTMLElement>;
+    @ViewChild('testtrigger', {static: false}) testtrigger!: ElementRef
+    @ViewChild('testtriggerbutton') testtriggerbutton!: ElementRef<HTMLElement>;
+    @ViewChild('forlooptrigger') forlooptrigger!: ElementRef<HTMLElement>;
+    //use for automoving if the game access database games
+    // trigger_onDragStart(){
+    //   let el: HTMLElement = this.dragevent.nativeElement;
+    //   el.click
     // }
-    // for(let file=1; file <= 8; file++){
-    //   color = (color == bcolor) ? wcolor :bcolor;
-    //   for(let file=1; file <= 8; file++){
-    //     console.log("file" + file + "col" + file)
-    //      color = (color == bcolor) ? wcolor :bcolor;
-    //      this.board1.push(new Square(count,'',color, false))
-    //      count++
-    //     //  color = "black"
-    //     //  this.board1.push(new Square(col,'',color, false))
-    //   }
-    // } 
-//This populates the board
- // this.board.push(
-  // this.board = new Board;
-  // this.empty_board = this.board.board;
-  // this.board.populate_board();
+  ngAfterViewInit(){
+    // this.testtrigger.nativeElement.click();
+  }
+
+  ngOnInit() {
+
   
   }
-  
+   // implement later
+  method_to_call_trigger(){
+    let el: HTMLElement = this.testtriggerbutton.nativeElement;
+    el.click()
+  }
+  testclick(){
+    alert("autoclicked test")
+  }
+  calltestclick(){
+    alert("manual trigger")
+  }
+
 
   onDragStart(cell: any){
     this.current_drag = cell;
-
   }
   onDrop(event: any, move: Square){
     console.log("ondrop")
+    //this is to call the method that triggers the other method from html
+    // this.method_to_call_trigger()
     try {
-    if ( this.board.check_legal(this.current_drag, move) == true) {
+    if ( this.board.check_legal(this.current_drag, move) == true && this.current_drag.piece.your_turn) {
       console.log("check legal returned true")
+      var count: number;
       // console.log(cell.piece)
       // console.log(this.board1[index])
       // console.log(this.current_drag.cell_name)
@@ -98,13 +114,21 @@ export class BoardComponent {
       console.log("this is the index: " + index + "this is the destination square: " + this.board.board[index].cell_name)
       this.board.board[index].piece = this.current_drag.piece;
       this.board.board[index].piece.first_move = false;
-  
+
+      // game notation
+      if (move.piece.color == 'white'){
+        this.game_notations.push(parseInt(String(this.game_notation_number)) +". " + move.piece.symbol + move.cell_name)
+      } else {
+        this.game_notations.push(move.piece.symbol +  move.cell_name)
+        this.game_notation_number += 1
+      }
+      
       this.board.board.forEach((square)=>{
         ///to add player freezing if not your turn
         if (square.piece.color == this.player_turn){
-          square.piece.not_your_turn = false;
+          square.piece.your_turn = true;
         } else {
-          square.piece.not_your_turn = true;
+          square.piece.your_turn = false;
         }
        
       });

@@ -22,8 +22,14 @@
 </div>
 
 <div *ngFor="let cells of empty_board">
-    {{cells.piece.url}}
+        <p></p>
 </div>
+<ng-container *ngFor="let move of game_notations">
+    {{move}}
+</ng-container>
+
+<div #testtrigger (click)="testclick()"> test </div>
+<div><button #testtriggerbutton (click)="calltestclick()"> click me testing</button></div>
 <!-- <div>
     <div draggable="true" *ngFor="let cells of board_index" (dragstart)="onDragStart(cells)">
     style = "display: flex;  flex-direction: row; flex-wrap: wrap;" 
@@ -32,16 +38,19 @@
 </div> -->
 
 <div  style = "display: flex;  flex-direction: row; flex-wrap: wrap;width: 400px">
-
     <!-- style = "display: flex;  flex-direction: row; flex-wrap: wrap;"        -->
-        <div (dragover)='onDragover($event)' *ngFor="let cells of empty_board" (dragstart)="onDragStart(cells)" (drop)="onDrop($event, cells)"  [ngStyle]="{'background-color': cells.color , 'height': cells.size, 'width': cells.size}"> 
+        <div #dragevent (dragover)='onDragover($event)' *ngFor="let cells of empty_board" (dragstart)="onDragStart(cells)" (drop)="onDrop($event, cells)"  [ngStyle]="{'background-color': cells.color , 'height': cells.size, 'width': cells.size}" > 
             <!-- <ng-container  *ngIf="(cells.piece.url != ''); else elseBlock "> -->
             <ng-template [ngIf]="cells.piece.url != ''" [ngIfElse]="elseBlock">
             <!-- <div draggable="true"> -->
                 <img src="{{cells.piece.url}}" width="40px" height="40px" draggable="true"> 
                 <!-- {{cells.piece}} -->
             </ng-template>
-            <ng-template #elseBlock><div draggable="false" ondragstart="return false;"></div></ng-template>
+            <ng-template #elseBlock><div #forlooptrigger (click)="testclick()"> </div></ng-template>
+            <!-- <ng-template #elseBlock><div draggable="false" ondragstart="return false;" ng-click="alert('Hello world')"> test </div></ng-template>
+        -->
         </div>
 
 </div>
+
+

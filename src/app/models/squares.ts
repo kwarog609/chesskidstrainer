@@ -93,10 +93,7 @@ export class Square
     }
      let url = 'assets/img/' + url_ext + piece + '.png';
 
-    // console.log(this.initial_piece.[file] )
-    // console.log(_.get(this.initial_piece, file))
-    // return this.initial_piece[file]
-    // console.log(Object.keys(this.initial_piece))
+
     this.piece = new Piece(piece, piece_color);
 
     this.piece.symbol

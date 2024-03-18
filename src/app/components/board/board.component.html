@@ -2,24 +2,10 @@
 <app-cell></app-cell>   
 
 <div> Data : {{player_turn}}</div>
-
-<div  draggable="false" style = "display: flex;  flex-direction: row; flex-wrap: wrap;width: 400px">
-    <div  draggable="false" (dragover)='onDragover($event)' *ngFor="let cells of empty_board" (dragstart)="onDragStart(cells)">
-    <!-- style = "display: flex;  flex-direction: row; flex-wrap: wrap;"        -->
-        <div draggable="false" (drop)="onDrop($event, cells)"  [ngStyle]="{'background-color': cells.color , 'height': cells.size, 'width': cells.size}"> 
-            <!-- <ng-container  *ngIf="(cells.piece.url != ''); else elseBlock "> -->
-            <ng-template [ngIf]="cells.piece.url != ''" [ngIfElse]="elseBlock">
-            <div draggable="true">
-            <!-- <div draggable="true"> -->
-                <img src="{{cells.piece.url}}" width="40px" height="40px"> 
-                <!-- {{cells.piece}} -->
-            </div></ng-template>
-            <ng-template #elseBlock><div draggable="false"></div></ng-template>
-            
-
-        </div>
-    </div>
+<div> 
+    <button>Previous</button><button>Play</button><button (click)="play_next_move()">Next</button>
 </div>
+<div>{{receive_player_move}}</div>
 
 <div *ngFor="let cells of empty_board">
         <p></p>

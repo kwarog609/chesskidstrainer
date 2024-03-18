@@ -516,54 +516,22 @@ export class Board
     }else{
       return false;
     }
-    
   }
+  public play_next_move(move_name: string){
+    console.log('played next move')
+    if(move_name.charAt(0) == 'N'){
+      let pieces = this.board.filter(x => x.piece.piece == 'knight')
+      let all_moves = [];
+      pieces.forEach(piece => {
+          console.log(piece)
+          console.log(piece.cell_name)
+          // all_moves.push(this.get_legal())
+          //per piece get legal moves
+          //check if the move_name is in the all_moves the get that piece and move it
+      });
+    } else {
 
-  // private get_position(file: number, rank: number) {
-  //   //returns a square name
-  //   let move = String.fromCharCode(96 + file) + "" + rank
-  //   return move
-  // }
-
-
-  // private get_index(name: String){
-  //   //returns rank and file in number
-  //   let file =  ((this.board1.filter(x => x.cell_name == name))[0].file).valueOf()
-  //   let rank = ((this.board1.filter(x => x.cell_name == name))[0].rank).valueOf()
-  //   // convert numbers to letters String.fromCharCode(97 + n)
-  //   // let possible_moves = String.fromCharCode(97 + current_square_rank)
-  //   let file_transformed = parseInt(file , 36) -9
-  //   console.log("file: " + file + '  rank: ' + rank)
-  //   return [file_transformed, rank]
-  // }
-
-  // 
-
-  // private check_legal(move_from: Square, move_to: Square): boolean{
-  //   // checks if the move is legal
-  //   // calls out of bounds
-  //   console.log(move_from.cell_name + " to --> " + move_to.cell_name)
-  //   const piece = move_from.piece;
-  //   const from_square = (move_from.cell_name)
-  //   const to_square = move_to.cell_name
-  //   const piece_color = move_from.piece_color
-
-  //   // call move checker 
-  //   const current_square = this.board1.filter(x => x.cell_name == from_square) //returns current square
-  //   const target_square = this.board1.filter(x => x.cell_name == to_square) // returns target square
-  //   console.log(current_square)
-    
-  //   if(this.check_legal_moves(from_square, piece, piece_color, target_square[0].cell_name.valueOf()) == 'legal'){
-  //     return true;
-  //   }
-
-  //   return false;
-  // }
-
-
-
-  // }
-
-
+    }
+  }
 }
 

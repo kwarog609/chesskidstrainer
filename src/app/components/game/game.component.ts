@@ -14,7 +14,8 @@ import { Piece } from '../../models/pieces';
 })
 export class GameComponent implements AfterViewInit{
 // @Input() board!: Board;
-player_one: string = 'This is player one';
+player_one: string = 'Player One';
+player_two: string = 'Player Two'
 notation: Array<string> = [];
 move: any;
 send_player_move:string = '';
@@ -42,7 +43,9 @@ public receive_move(move: any){
 }
 
 handle_player_move(){
-  this.send_player_move = "this is the move to be sent"
+  // send move to board 
+  console.log('move sent')
+  this.send_player_move = "this is the move to be sent" + Math.random()
 }
 
 

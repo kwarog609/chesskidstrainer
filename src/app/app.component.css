@@ -30,7 +30,8 @@ body {
   }
   
   .grid_header { 
-    background-color: #FEBAC5;
+    background-color: #C2EAE9;
+    /* background-color: #FEBAC5; */
     grid-area: header; 
   }
   .grid_main {
@@ -38,15 +39,16 @@ body {
     grid-area: main; 
   }
   .grid_left { 
-    background-color: #FACFD7;
+    background-color:#C2EAE9;
+    /* background-color: #FACFD7; */
     grid-area: nav;
   }
   .grid_right { 
-    background-color: #6CD1EA;
+    background-color: #C2EAE9;
     grid-area: right;
   }
   .grid_footer {
-    background-color: #F8EFB6;
+    background-color: #C2EAE9;
     grid-area: footer;
   }
   

@@ -1,12 +1,9 @@
-<p>game works!</p>
+
 <div> Game notations </div>
+<div>{{player_one}} vs {{player_two}}</div>
 <ng-container *ngFor="let moves of notation">
     {{moves}}
 </ng-container>
-<button (click)="handle_player_move()">Player Next Move</button>
-<div></div>
-
-<div>This is the game component</div>
 <app-board 
 [receive_player_move]="send_player_move"
 (passing_to_parent_event)="method_to_execute_by_parent($event)"
@@ -14,3 +11,4 @@
 
 </app-board>
 <!-- <app-board [player_one]="player_one";[passing_to_parent_event]="method_to_execute_by_parent()"> </app-board> -->
+<!-- this are the test buttons <button (click)="handle_player_move()">Player Next Move</button> -->

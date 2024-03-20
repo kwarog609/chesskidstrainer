@@ -52,48 +52,7 @@ export class Piece
 
 
     private check_legal_moves(from_square: String, piece: String, color: String, target_square: string): string{
-      //     //possible moves
-      //     //parseInt('a', 36) - 9 convert to number
-      //   let piece_color = color
-      //   let file = this.get_index(from_square)[0]
-      //   let rank = this.get_index(from_square)[1]
-      //   switch(piece){
-      //     case 'pawn':{
-      //       if (piece_color == 'white') {
-      //           rank += 1;
-      //       } else {
-      //         rank -= 1;
-      //       }
-    
-      //       // console.log("possible moves: " + possible_moves)
-      //     let move = this.get_position(file, rank)
-      //     console.log("move: " + move)
-      //     let possible_moves = (this.board1.filter(x => x.cell_name == move))[0];
-      //     console.log("possible move: " + possible_moves.cell_name)
-      //     console.log("possible move: " + possible_moves.piece)
-      //     console.log("target square: " + target_square)
-      //     if(((possible_moves.piece) == '' && target_square == move)) {
-      //       console.log('legal')
-      //       return 'legal'
-      //       } else {
-      //         break;
-      //       }
-            
-      //     }
-      //     case 'king':{
-      //       break;
-      //     } case 'queen':{
-      //       break;
-      //     } case 'rook':{
-      //       break;
-      //     } case 'knight':{
-      //       break;
-      //     } case 'bishop':{
-      //       break;
-      //     } default:{
-      //       break;
-      //     }
-      //   }
+
     return 'illegal'
       }
 

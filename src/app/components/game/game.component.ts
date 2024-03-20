@@ -42,7 +42,9 @@ public receive_move(move: any){
 }
 
 handle_player_move(){
-  this.send_player_move = "this is the move to be sent"
+  // send move to board 
+  console.log('move sent')
+  this.send_player_move = "this is the move to be sent" + Math.random()
 }
 
 

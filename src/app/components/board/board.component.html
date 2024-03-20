@@ -1,22 +1,5 @@
 
-<app-cell></app-cell>   
 
-<div> Data : {{player_turn}}</div>
-<div> 
-    <button>Previous</button><button>Play</button><button (click)="play_next_move()">Next</button>
-</div>
-<div>{{receive_player_move}}</div>
-
-<div *ngFor="let cells of empty_board">
-        <p></p>
-</div>
-<div> Game notations</div>
-<ng-container *ngFor="let move of game_notations">
-    {{move}}
-</ng-container>
-
-<div #testtrigger (click)="testclick()"> test </div>
-<div><button #testtriggerbutton (click)="calltestclick()"> click me testing</button></div>
 <!-- <div>
     <div draggable="true" *ngFor="let cells of board_index" (dragstart)="onDragStart(cells)">
     style = "display: flex;  flex-direction: row; flex-wrap: wrap;" 
@@ -41,3 +24,20 @@
 </div>
 
 
+<div> Data : {{player_turn}}</div>
+<div> 
+    <button>Previous</button><button>Play</button><button (click)="play_next_move()">Next</button>
+    <h1>{{receive_player_move}}</h1>
+</div>
+<div>{{receive_player_move}}</div>
+
+<div *ngFor="let cells of empty_board">
+        <p></p>
+</div>
+<div> Game notations</div>
+<ng-container *ngFor="let move of game_notations">
+    {{move}}
+</ng-container>
+
+<div #testtrigger (click)="testclick()"> test </div>
+<div><button #testtriggerbutton (click)="calltestclick()"> click me testing</button></div>
